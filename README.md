@@ -41,8 +41,6 @@ git clone https://github.com/Momona0v0/monkey/
 
 ### 通用
 
-【（回复一条消息并发送"贴猴"）】：手动给该消息贴猴
-
 【帮助贴猴机】：显示帮助
 
 ## 致谢
