@@ -16,7 +16,7 @@ git clone https://github.com/Momona0v0/monkey/
 
 2.启用：
 
-在 HoshinoBot\hoshino\config\ bot.py 文件的 MODULES_ON 加入 'monkey'
+在 HoshinoBot\hoshino\config\bot.py 文件的 MODULES_ON 加入 'monkey'
 
 然后重启 HoshinoBot
 
