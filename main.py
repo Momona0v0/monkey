@@ -5,14 +5,7 @@ import aiohttp
 import asyncio
 import re
 
-sv = Service('贴猴机', enable_on_default=True, visible=True)
-
-# 猴子表情的ID
-MONKEY_EMOJI_ID = 128053
-# 帮助指令
-@sv.on_fullmatch('贴猴帮助')
-async def monkey_help(bot, ev: CQEvent):
-    help_msg = '''
+sv_help ='''
 【管理员指令】
 1. 开启无差别贴猴 [概率值] ：开启无差别贴猴 (概率可选: 0-100，默认100)
 2. 关闭无差别贴猴：关闭随机贴猴
@@ -29,7 +22,11 @@ async def monkey_help(bot, ev: CQEvent):
 
 注意: 所有贴猴操作都会添加0-1秒的随机延迟以防止API限制
 '''.strip()
-    await bot.send(ev, help_msg)
+
+sv = Service(name = '贴猴机', enable_on_default = True, visible = True, bundle = "娱乐", help_ = sv_help )
+
+# 猴子表情的ID
+MONKEY_EMOJI_ID = 128053
 
 # 全局设置
 monkey_settings = {
@@ -60,6 +57,7 @@ async def stick_monkey(bot, ev: CQEvent):
         if user_id in monkey_settings['target_users']:
             target_user_match = True
         else:
+            # 如果设置了目标用户但当前用户不在其中，则不处理
             return
     
     # 检查是否包含关键词
@@ -69,37 +67,56 @@ async def stick_monkey(bot, ev: CQEvent):
         if contains_keyword:
             keyword_match = True
         else:
+            # 如果设置了关键词但当前消息不包含，则不处理
             return
     
     # 如果是针对特定用户或关键词的模式，则100%贴猴
     if target_user_match or keyword_match:
-        # 直接贴猴，不检查概率
-        pass
+        # 添加随机延迟 (0-1秒)
+        await asyncio.sleep(random.random())
+        
+        # 获取消息ID
+        message_id = ev.message_id
+        
+        try:
+            # 使用HoshinoBot提供的call_action方法
+            result = await bot.call_action('set_msg_emoji_like', 
+                                          message_id=message_id, 
+                                          emoji_id=MONKEY_EMOJI_ID)
+            
+            if result.get('retcode') == 0:
+                sv.logger.info(f"成功给消息 {message_id} 添加猴子表情")
+            else:
+                sv.logger.error(f"添加表情失败: {result}")
+        
+        except Exception as e:
+            sv.logger.error(f"调用API时出错: {e}")
+        return
     
     # 如果是无差别模式，使用设置的概率
     if monkey_settings['global_enabled']:
         if random.random() > monkey_settings['global_probability']:
             return
-    
-    # 添加随机延迟 (0-1秒)
-    await asyncio.sleep(random.random())
-    
-    # 获取消息ID
-    message_id = ev.message_id
-    
-    try:
-        # 使用HoshinoBot提供的call_action方法
-        result = await bot.call_action('set_msg_emoji_like', 
-                                      message_id=message_id, 
-                                      emoji_id=MONKEY_EMOJI_ID)
         
-        if result.get('retcode') == 0:
-            sv.logger.info(f"成功给消息 {message_id} 添加猴子表情")
-        else:
-            sv.logger.error(f"添加表情失败: {result}")
-    
-    except Exception as e:
-        sv.logger.error(f"调用API时出错: {e}")
+        # 添加随机延迟 (0-1秒)
+        await asyncio.sleep(random.random())
+        
+        # 获取消息ID
+        message_id = ev.message_id
+        
+        try:
+            # 使用HoshinoBot提供的call_action方法
+            result = await bot.call_action('set_msg_emoji_like', 
+                                          message_id=message_id, 
+                                          emoji_id=MONKEY_EMOJI_ID)
+            
+            if result.get('retcode') == 0:
+                sv.logger.info(f"成功给消息 {message_id} 添加猴子表情")
+            else:
+                sv.logger.error(f"添加表情失败: {result}")
+        
+        except Exception as e:
+            sv.logger.error(f"调用API时出错: {e}")
 
 # 设置无差别贴猴概率（可开启或修改概率）
 @sv.on_prefix('开启无差别贴猴')
