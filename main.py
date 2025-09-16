@@ -17,8 +17,7 @@ sv_help ='''
 8. 查看贴猴设置：显示当前设置
 
 【通用指令】
-1. 回复一条消息并发送"贴猴"：手动给该消息贴猴
-2. 贴猴帮助：显示此帮助信息
+1. 贴猴帮助：显示此帮助信息
 
 注意: 所有贴猴操作都会添加0-1秒的随机延迟以防止API限制
 '''.strip()
@@ -308,32 +307,5 @@ async def view_monkey_settings(bot, ev: CQEvent):
     
     await bot.send(ev, settings_msg)
 
-# 手动触发功能的指令
-@sv.on_prefix(('贴猴', '贴猴子'))
-async def manual_stick_monkey(bot, ev: CQEvent):
-    # 检查是否是回复消息
-    if not ev.reply:
-        await bot.send(ev, "请回复一条消息来使用贴猴功能")
-        return
-    
-    # 添加随机延迟 (0-1秒)
-    await asyncio.sleep(random.random())
-    
-    # 获取被回复的消息ID
-    message_id = ev.reply["message_id"]
-    
-    try:
-        # 使用HoshinoBot提供的call_action方法
-        result = await bot.call_action('set_msg_emoji_like', 
-                                      message_id=message_id, 
-                                      emoji_id=MONKEY_EMOJI_ID)
-        
-        if result.get('retcode') == 0:
-            await bot.send(ev, "猴子已贴上! 🐒")
-        else:
-            await bot.send(ev, f"贴猴失败: {result.get('message', '未知错误')}")
-    
-    except Exception as e:
-        sv.logger.error(f"调用API时出错: {e}")
-        await bot.send(ev, "贴猴时出现错误")
+
 
