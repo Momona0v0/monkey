@@ -18,14 +18,12 @@ sv_help ='''
 
 【通用指令】
 1. 贴猴帮助：显示此帮助信息
-
-注意: 所有贴猴操作都会添加0-1秒的随机延迟以防止API限制
 '''.strip()
 
 sv = Service(name = '贴猴机', enable_on_default = True, visible = True, bundle = "娱乐", help_ = sv_help )
 
 # 猴子表情的ID
-MONKEY_EMOJI_ID = 128053
+MONKEY_EMOJI_ID = 128053  # 我是猴，可以根据需要改成爱心或其他表情
 
 # 全局设置
 monkey_settings = {
@@ -306,6 +304,7 @@ async def view_monkey_settings(bot, ev: CQEvent):
 """.strip()
     
     await bot.send(ev, settings_msg)
+
 
 
 
