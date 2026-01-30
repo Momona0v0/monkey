@@ -19,9 +19,6 @@ sv_help = '''
 7. 取消贴猴关键词 XXX ：取消关键词过滤 
 8. 查看贴猴设置：显示当前设置
 
-【通用指令】
-1. 贴猴帮助：显示此帮助信息
-
 注意: 所有贴猴操作都会添加0-1秒的随机延迟以防止API限制
 '''.strip()
 
@@ -441,4 +438,5 @@ async def check_monkey_settings(bot, ev: CQEvent):
     if group_file.exists():
         await bot.send(ev, f"群 {group_id} 的贴猴设置已存在")
     else:
+
         await bot.send(ev, f"群 {group_id} 尚未初始化贴猴设置，请管理员发送【贴猴初始化】")
