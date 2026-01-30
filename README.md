@@ -20,6 +20,8 @@ git clone https://github.com/Momona0v0/monkey/
 
 然后重启 HoshinoBot
 
+运行前先发送一次“贴猴初始化”生成配置文件
+
 ## 指令
 ### 仅限qq群管理员
 
